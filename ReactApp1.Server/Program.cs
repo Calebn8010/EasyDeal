@@ -16,6 +16,13 @@ namespace EasyDeal.Server.Data
 
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
+            builder.Services.AddAuthorization();
+
+            // Add in addtional api endpoints for React front end
+            builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -27,6 +34,16 @@ namespace EasyDeal.Server.Data
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.MapIdentityApi<ApplicationUser>();
+
+            app.MapPost("/logout", async (SignInManager<ApplicationUser> signInManager) =>
+            {
+
+                await signInManager.SignOutAsync();
+                return Results.Ok();
+
+            }).RequireAuthorization();
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
