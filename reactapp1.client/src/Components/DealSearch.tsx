@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import '../App.css';
 
 
@@ -32,5 +32,6 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearch }) => {
         </form>
     );
 };
+
 
 export default SearchForm;

@@ -66,6 +66,10 @@ export default defineConfig({
             '^/logout': {
                 target,
                 secure: false
+            },
+            '^/dealsearch': {
+                target,
+                secure: false
             }
         },
         port: parseInt(env.DEV_SERVER_PORT || '49366'),
