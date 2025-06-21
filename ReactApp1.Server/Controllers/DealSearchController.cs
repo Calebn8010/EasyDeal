@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ReactApp1.Server.Controllers;
+using ReactApp1.Server.Models; 
 using System;
 using System.Net.Http;
 using System.Text.Json.Nodes;
@@ -19,13 +20,13 @@ namespace EasyDeal.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post()
+        public async Task<IActionResult> Post([FromBody] DealSearchRequest request)
         {
-            // Example: return a simple JSON object
             Console.WriteLine("DealSearchController Post method called.");
-            Console.WriteLine(Post().ToString);
+            Console.WriteLine($"Received query: {request?.Query}");
 
             var result = new { message = "Deals fetched successfully" };
+            Console.WriteLine(result.GetType);
             return Ok(result);
         }
     }
