@@ -24,10 +24,81 @@ namespace EasyDeal.Server.Controllers
         {
             Console.WriteLine("DealSearchController Post method called.");
             Console.WriteLine($"Received query: {request?.Query}");
+            var deals = await GetRequest(request.Query);
 
-            var result = new { message = "Deals fetched successfully" };
-            Console.WriteLine(result.GetType);
-            return Ok(result);
+            return Ok(deals); // Serialize list of deals to JSON
         }
+
+        static async Task<List<GameDeal>> GetRequest(string game)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    string url = $"https://www.cheapshark.com/api/1.0/games?title={game}&exact=0"; // Replace with your API URL
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode(); // Throws an exception for 4xx/5xx responses
+
+                    string type = response.Content.GetType().ToString();
+                    Console.WriteLine($"Response type: {type}");
+
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine(responseBody);
+
+                    // Deserialize the JSON response into a dynamic object
+                    JsonNode jsonResponse = JsonNode.Parse(responseBody);
+                    foreach (var entry in jsonResponse.AsArray())
+                    {
+                        //Access properties
+                        Console.WriteLine(entry);
+                        Console.WriteLine();
+                    }
+
+                    var deals = System.Text.Json.JsonSerializer.Deserialize<List<GameDeal>>(responseBody);
+                    return deals ?? new List<GameDeal>();
+
+                    
+
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine($"Request error: {e.Message}");
+                    return new List<GameDeal>(); // Return an empty list on error
+                }
+            }
+        }
+
+
+        static async Task GetRequestId(string id)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    string url = $"https://www.cheapshark.com/api/1.0/games?id={id}"; // Replace with your API URL
+                    HttpResponseMessage response = await client.GetAsync(url);
+
+                    response.EnsureSuccessStatusCode(); // Throws an exception for 4xx/5xx responses
+
+                    Console.WriteLine("Response received");
+
+                    string type = response.Content.GetType().ToString();
+                    Console.WriteLine($"Response type: {type}");
+
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine(responseBody);
+
+                    // Deserialize the JSON response into a dynamic object
+                    JsonNode jsonResponse = JsonNode.Parse(responseBody);
+                    Console.WriteLine(jsonResponse);
+
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine($"Request error: {e.Message}");
+                }
+            }
+        }
+
     }
 }
