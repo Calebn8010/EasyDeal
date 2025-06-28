@@ -39,16 +39,17 @@ function Home() {
             <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
                 <h4>Search for PC games to add into your EasyDeal list</h4>
                 <SearchForm onSearch={handleSearch} />
-                <ul className="w-full max-w-md mt-4">
+                <ul className="list">
                     {deals.map((deal, idx) => (
-                        <li key={idx} className="flex justify-between items-center p-2 border-b">
+                        <li key={idx} className="list-item">
                             <span>{deal.external ?? "Untitled Deal"}</span>
                             <button
-                                className="ml-2 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                                className="add ml-2 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
                                 onClick={() => handleAdd(deal)}
                             >
                                 Add
                             </button>
+                            <span> Cheapest deal: {deal.cheapest ?? "No deal found"}</span>
                         </li>
                     ))}
                 </ul>
