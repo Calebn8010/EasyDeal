@@ -60,7 +60,7 @@ function Home() {
                     ))}
                 </ul>
             </div>
-            <WeatherForecast />
+            
         </AuthorizeView>
     );
 }
