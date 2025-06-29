@@ -25,3 +25,25 @@ th, td {
     padding: 20px;
     text-align: left;
 }
+
+
+.list {
+    list-style-type: none;
+}
+
+.list-item {
+    padding: 1rem;
+    outline: auto;
+    margin-bottom: 1rem;
+}
+
+.add {
+    margin-left: 1rem;
+}
+
+.deal-img {
+    max-width: 7%;
+    height: auto;
+    border-radius: 8px;
+    margin-right: 1rem;
+}
