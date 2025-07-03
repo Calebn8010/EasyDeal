@@ -40,7 +40,7 @@ function Home() {
             <span><LogoutLink>Logout <AuthorizedUser value="email" /></LogoutLink></span>
             <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
                 <h4>Search for PC games to add into your EasyDeal list</h4>
-                <SearchForm onSearch={handleSearch} />
+                <SearchForm onSearch={handleSearch}/>
                 <ul className="list">
                     {deals.map((deal, idx) => (
                         <li key={idx} className="list-item">

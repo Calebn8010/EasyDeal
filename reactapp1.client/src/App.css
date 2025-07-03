@@ -26,6 +26,10 @@ th, td {
     text-align: left;
 }
 
+.search {
+    margin: 1rem;
+}
+
 
 .list {
     list-style-type: none;
@@ -42,8 +46,8 @@ th, td {
 }
 
 .deal-img {
-    max-width: 7%;
-    height: auto;
+    max-width: 10%;
+    max-height: 10%;
     border-radius: 8px;
     margin-right: 1rem;
 }
