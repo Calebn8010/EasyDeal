@@ -45,10 +45,10 @@ function Home() {
                     {deals.map((deal, idx) => (
                         <li key={idx} className="list-item">
                             <img className="deal-img" src={deal.thumb} />
-                            <span>{deal.external ?? "Untitled Deal"}</span>
+                            <span className="list-item-values">{deal.external ?? "Untitled Deal"}</span>
                             
-                            <span> Cheapest deal: {deal.cheapest ?? "No deal found"}</span>
-                            <span> Cheapest price: {deal.cheapestPrice ?? "No price found"}</span>
+                            <span className="list-item-deal"> Current best deal: {deal.cheapest ?? "No deal found"}</span>
+                            <span className="list-item-values"> Cheapest price: {deal.cheapestPrice ?? "No price found"}</span>
                             
                             <button
                                 className="add ml-2 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"

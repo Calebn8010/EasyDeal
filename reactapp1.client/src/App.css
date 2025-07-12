@@ -46,6 +46,15 @@ th, td {
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
+.list-item-values {
+    margin-right: auto;
+}
+
+.list-item-deal {
+    margin-right: auto;
+    color: #4caf50; /* green */
+}
+
 .add {
     margin-left: auto;
     margin-bottom: auto;
