@@ -35,7 +35,7 @@ namespace EasyDeal.Server.Controllers
             {
                 try
                 {
-                    string url = $"https://www.cheapshark.com/api/1.0/games?title={game}&exact=0"; // Replace with your API URL
+                    string url = $"https://www.cheapshark.com/api/1.0/games?title={game}&exact=0"; 
                     HttpResponseMessage response = await client.GetAsync(url);
                     response.EnsureSuccessStatusCode(); // Throws an exception for 4xx/5xx responses
 
@@ -55,6 +55,24 @@ namespace EasyDeal.Server.Controllers
                     }
 
                     var deals = System.Text.Json.JsonSerializer.Deserialize<List<GameDeal>>(responseBody);
+
+                    foreach (var entry in jsonResponse.AsArray())
+                    {
+                        //Access properties
+                        // Check for null before accessing 
+                        if (entry?["gameID"] != null)
+                        {
+                            Console.WriteLine(entry["gameID"]);
+                            //Console.WriteLine(entry["gameID"].GetType());
+                            
+                            // Extract game id as string from the Json Object
+                            string id = entry["gameID"].GetValue<string>();
+                            GetRequestId(id);
+                        }
+                        
+                        Console.WriteLine();
+                    }
+
                     return deals ?? new List<GameDeal>();
 
                     
@@ -86,11 +104,34 @@ namespace EasyDeal.Server.Controllers
                     Console.WriteLine($"Response type: {type}");
 
                     string responseBody = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(responseBody);
+                    //Console.WriteLine(responseBody);
 
                     // Deserialize the JSON response into a dynamic object
                     JsonNode jsonResponse = JsonNode.Parse(responseBody);
-                    Console.WriteLine(jsonResponse);
+                    //Console.WriteLine(jsonResponse);
+                    Console.WriteLine(jsonResponse["cheapestPriceEver"]);
+                    Console.WriteLine("made it here0");
+
+                    JsonNode cheapestPriceEver = jsonResponse["cheapestPriceEver"];
+                    string Price = cheapestPriceEver["price"]?.GetValue<string>();
+                    Console.WriteLine(Price);
+                    Console.WriteLine("made it here1.5");
+
+                    if (cheapestPriceEver["date"] != null)
+                    {
+                        long unixTimestamp = cheapestPriceEver["date"].GetValue<long>();
+                        Console.WriteLine(unixTimestamp);
+                        Console.WriteLine("made it here1");
+
+                        //Set Unix timestamp value to Human date 
+                        DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
+
+                        string Date = dateTime.Date.ToString("MMMM dd, yyyy");
+                        Console.WriteLine("made it here2");
+                        Console.WriteLine(Date); 
+                    }
+                    
+
 
                 }
                 catch (HttpRequestException e)

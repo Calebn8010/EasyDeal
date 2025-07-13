@@ -9,5 +9,8 @@ namespace ReactApp1.Server.Models
         public string external { get; set; }
         public string internalName { get; set; }
         public string thumb { get; set; }
+        public string cheapestPriceEver { get; set; }
+
+        public string date { get; set; }
     }
 }
