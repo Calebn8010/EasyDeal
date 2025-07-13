@@ -47,18 +47,15 @@ namespace EasyDeal.Server.Controllers
 
                     // Deserialize the JSON response into a dynamic object
                     JsonNode jsonResponse = JsonNode.Parse(responseBody);
-                    foreach (var entry in jsonResponse.AsArray())
-                    {
-                        //Access properties
-                        Console.WriteLine(entry);
-                        Console.WriteLine();
-                    }
 
                     var deals = System.Text.Json.JsonSerializer.Deserialize<List<GameDeal>>(responseBody);
 
                     foreach (var entry in jsonResponse.AsArray())
                     {
                         //Access properties
+                        Console.WriteLine(entry);
+                        Console.WriteLine();
+
                         // Check for null before accessing 
                         if (entry?["gameID"] != null)
                         {
@@ -101,7 +98,6 @@ namespace EasyDeal.Server.Controllers
                     Console.WriteLine("Response received");
 
                     string type = response.Content.GetType().ToString();
-                    Console.WriteLine($"Response type: {type}");
 
                     string responseBody = await response.Content.ReadAsStringAsync();
                     //Console.WriteLine(responseBody);
@@ -110,24 +106,19 @@ namespace EasyDeal.Server.Controllers
                     JsonNode jsonResponse = JsonNode.Parse(responseBody);
                     //Console.WriteLine(jsonResponse);
                     Console.WriteLine(jsonResponse["cheapestPriceEver"]);
-                    Console.WriteLine("made it here0");
 
                     JsonNode cheapestPriceEver = jsonResponse["cheapestPriceEver"];
                     string Price = cheapestPriceEver["price"]?.GetValue<string>();
                     Console.WriteLine(Price);
-                    Console.WriteLine("made it here1.5");
 
                     if (cheapestPriceEver["date"] != null)
                     {
                         long unixTimestamp = cheapestPriceEver["date"].GetValue<long>();
-                        Console.WriteLine(unixTimestamp);
-                        Console.WriteLine("made it here1");
 
                         //Set Unix timestamp value to Human date 
                         DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
 
                         string Date = dateTime.Date.ToString("MMMM dd, yyyy");
-                        Console.WriteLine("made it here2");
                         Console.WriteLine(Date); 
                     }
                     
