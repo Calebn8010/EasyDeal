@@ -51,8 +51,12 @@ th, td {
 }
 
 .list-item-deal {
-    margin-right: auto;
     color: #4caf50; /* green */
+    font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+    font-weight: 600;
+    font-size: .91rem;
+    letter-spacing: 0.3px;
+    text-shadow: 0 1px 2px rgba(76, 175, 80, 0.15);
 }
 
 .add {
@@ -60,9 +64,38 @@ th, td {
     margin-bottom: auto;
 }
 
+.drop-down {
+    /*margin-left: auto;*/
+    margin-bottom: auto;
+    margin-left: 1rem
+    width: .7rem;
+    height: .7rem;
+    font-size: .7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.extra-info {
+    left: 0;
+    margin-top: 0.5rem; /* Equivalent to mt-2 (typically 8px) */
+    padding: 0.75rem; /* Equivalent to p-3 (typically 12px) */
+    border-radius: 0.25rem; /* Rounded corners */
+    z-index: 10;
+}
+
 .deal-img {
     max-width: 10%;
     max-height: 10%;
     border-radius: 8px;
     margin-right: 1rem;
+    margin-bottom: auto;
+}
+
+.actions {
+    display: flex;
+    gap: 0.8rem;
+    margin-left: auto;
+    align-items: center;
+    margin-bottom: auto;
 }
