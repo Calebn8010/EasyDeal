@@ -1,38 +1,35 @@
-import React from 'react';
-import { useState } from "react";
+﻿import React, { useState } from 'react';
 import WeatherForecast from "../Components/WeatherForecast.tsx";
 import LogoutLink from "../Components/LogoutLink.tsx";
 import AuthorizeView, { AuthorizedUser } from "../Components/AuthorizeView.tsx";
 import SearchForm from "../Components/DealSearch.tsx";
 
-
 function Home() {
     const [deals, setDeals] = useState<any[]>([]);
+    const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
 
     async function handleSearch(query: string) {
-        console.log("Searching for:", query);
-        // Implement your search logic here
         const response = await fetch('dealsearch', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query })
         });
-        console.log(response);
         const data = await response.json();
+        setDeals(Array.isArray(data) ? data : []);
         //console.log(data);
         //console.log(typeof data);
         //const arrayData = Array.isArray(data) ? data : Object.values(data);
         //setDeals(arrayData);
         //console.log(arrayData);
         //console.log(typeof arrayData);
-        setDeals(Array.isArray(data) ? data : []);
     }
 
     function handleAdd(deal: any) {
-        // Implement your add logic here
         console.log("Add clicked for:", deal);
+    }
+
+    function toggleExpand(idx: number) {
+        setExpandedIdx(expandedIdx === idx ? null : idx);
     }
 
     return (
@@ -43,24 +40,38 @@ function Home() {
                 <SearchForm onSearch={handleSearch}/>
                 <ul className="list">
                     {deals.map((deal, idx) => (
-                        <li key={idx} className="list-item">
+                        <li key={idx} className="list-item relative">
                             <img className="deal-img" src={deal.thumb} />
                             <span className="list-item-values">{deal.external ?? "Untitled Deal"}</span>
-                            
-                            <span className="list-item-deal"> Current best deal: {deal.cheapest ?? "No deal found"}</span>
-                            <span className="list-item-values"> Cheapest price: {deal.cheapestPrice ?? "No price found"}</span>
-                            
-                            <button
-                                className="add ml-2 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
-                                onClick={() => handleAdd(deal)}
-                            >
-                                Add
-                            </button>
+                
+                            <div className="actions">
+                                <span className="list-item-deal"> Best deal today: ${deal.cheapest ?? "No deal found"}</span>
+                                <button
+                                    className="add ml-2 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                                    onClick={() => handleAdd(deal)}
+                                >
+                                    Add
+                                </button>
+                                <button
+                                    className="drop-down"
+                                    onClick={() => toggleExpand(idx)}
+                                    aria-label="Expand details"
+                                >
+                                    {expandedIdx === idx ? '▲' : '▼'}
+                                </button>
+                            </div>
+                            {expandedIdx === idx && (
+                                <div className="extra-info">
+                                    {/* Display additional info here */}
+                                    <div><strong>Deal ID:</strong> {deal.dealID}</div>
+                                    <div><strong>Store:</strong> {deal.storeID}</div>
+                                    <div><strong>Other Info:</strong> {deal.someOtherField ?? "N/A"}</div>
+                                </div>
+                            )}
                         </li>
                     ))}
                 </ul>
             </div>
-            
         </AuthorizeView>
     );
 }
