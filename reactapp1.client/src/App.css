@@ -70,10 +70,11 @@ th, td {
     margin-left: 1rem
     width: .7rem;
     height: .7rem;
-    font-size: .7rem;
+    font-size: .5rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: .7rem;
 }
 
 .extra-info {
