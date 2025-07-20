@@ -45,7 +45,13 @@ function Home() {
                             <span className="list-item-values">{deal.external ?? "Untitled Deal"}</span>
                 
                             <div className="actions">
-                                <span className="list-item-deal"> Best deal today: ${deal.cheapest ?? "No deal found"}</span>
+                                <span
+                                    className="list-item-deal"
+                                    style={{ cursor: 'pointer', textDecoration: 'underline', color: '#2563eb' }}
+                                    onClick={() => window.open(`https://www.cheapshark.com/redirect?dealID=${deal.cheapestDealID}`, '_blank')}
+                                >
+                                    Best deal today: ${deal.cheapest ?? "No deal found"}
+                                </span>
                                 <button
                                     className="add ml-2 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
                                     onClick={() => handleAdd(deal)}
