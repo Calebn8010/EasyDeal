@@ -5,6 +5,8 @@ using System;
 using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EasyDeal.Server.Controllers
 {
@@ -25,6 +27,10 @@ namespace EasyDeal.Server.Controllers
             Console.WriteLine("DealSearchController Post method called.");
             Console.WriteLine($"Received query: {request?.Query}");
             var deals = await GetRequest(request.Query);
+
+            //Testing new request function
+            Console.WriteLine(deals[0].cheapestDealID);
+            GetDealInfo(deals[0].cheapestDealID);
 
             return Ok(deals); // Serialize list of deals to JSON
         }
@@ -56,6 +62,7 @@ namespace EasyDeal.Server.Controllers
                         Console.WriteLine(entry);
                         Console.WriteLine();
 
+                        /*
                         // Check for null before accessing 
                         if (entry?["gameID"] != null)
                         {
@@ -66,9 +73,10 @@ namespace EasyDeal.Server.Controllers
                             string id = entry["gameID"].GetValue<string>();
                             GetRequestId(id);
                         }
-                        
+                        */
                         Console.WriteLine();
                     }
+
 
                     return deals ?? new List<GameDeal>();
 
@@ -83,6 +91,86 @@ namespace EasyDeal.Server.Controllers
             }
         }
 
+        static async Task GetDealInfo(string id)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    string url = $"https://www.cheapshark.com/api/1.0/deals?id={id}";
+                    HttpResponseMessage response = await client.GetAsync(url);
+
+                    response.EnsureSuccessStatusCode(); // Throws an exception for 4xx/5xx responses
+
+                    Console.WriteLine("Response received");
+
+                    string type = response.Content.GetType().ToString();
+
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    //Console.WriteLine(responseBody);
+
+                    // Deserialize the JSON response into a dynamic object
+                    JsonNode jsonResponse = JsonNode.Parse(responseBody);
+                    //Console.WriteLine(jsonResponse);
+                    Console.WriteLine(jsonResponse["gameInfo"]);
+                    Console.WriteLine(jsonResponse["cheapestPrice"]);
+
+                    JsonNode gameInfo = jsonResponse["gameInfo"];
+                    JsonNode cheapestPrice = jsonResponse["cheapestPrice"];
+
+                    string retailPrice = gameInfo["retailPrice"]?.GetValue<string>();
+                    Console.WriteLine($"retailPrice: {retailPrice}");
+
+                    string steamRatingText = gameInfo["steamRatingText"]?.GetValue<string>();
+                    Console.WriteLine($"steamRatingText: {steamRatingText}");
+
+                    string steamRatingCount = gameInfo["steamRatingCount"]?.GetValue<string>();
+                    Console.WriteLine($"steamRatingCount: {steamRatingCount}");
+
+                    string metacriticScore = gameInfo["metacriticScore"]?.GetValue<string>();
+                    Console.WriteLine($"metacriticScore: {metacriticScore}");
+
+                    string dealLink = $"https://www.cheapshark.com/redirect?dealID={id}";
+                    Console.WriteLine($"dealLink: {dealLink}");
+
+
+                    string chepestPriceEver = cheapestPrice["price"]?.GetValue<string>();
+                    Console.WriteLine(chepestPriceEver);
+
+                    //Check for cheapest price date
+                    if (cheapestPrice["date"] != null)
+                    {
+                        long unixTimestamp = cheapestPrice["date"].GetValue<long>();
+
+                        //Set Unix timestamp value to Human date 
+                        DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
+
+                        string Date = dateTime.Date.ToString("MMMM dd, yyyy");
+                        Console.WriteLine($"chepest price date: {Date}");
+                    }
+
+                    //Check for release date
+                    if (gameInfo["releaseDate"] != null)
+                    {
+                        long unixTimestamp = cheapestPrice["date"].GetValue<long>();
+
+                        //Set Unix timestamp value to Human date 
+                        DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
+
+                        string releaseDate = dateTime.Date.ToString("MMMM dd, yyyy");
+                        Console.WriteLine($"chepest price date: {releaseDate}");
+                    }
+
+
+
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine($"Request error: {e.Message}");
+                }
+            }
+        }
+
 
         static async Task GetRequestId(string id)
         {
@@ -90,7 +178,7 @@ namespace EasyDeal.Server.Controllers
             {
                 try
                 {
-                    string url = $"https://www.cheapshark.com/api/1.0/games?id={id}"; // Replace with your API URL
+                    string url = $"https://www.cheapshark.com/api/1.0/games?id={id}"; 
                     HttpResponseMessage response = await client.GetAsync(url);
 
                     response.EnsureSuccessStatusCode(); // Throws an exception for 4xx/5xx responses
