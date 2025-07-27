@@ -9,6 +9,7 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using EasyDeal.Server.Models;
 
 namespace EasyDeal.Server.Controllers
 {
@@ -70,6 +71,62 @@ namespace EasyDeal.Server.Controllers
             }
         }
 
+        public static async Task<BestGameDeal>GameInfoById(string id)
+        {
+            var bestDeal = new BestGameDeal();
+
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    string url = $"https://www.cheapshark.com/api/1.0/games?id={id}";
+                    HttpResponseMessage response = await client.GetAsync(url);
+
+                    response.EnsureSuccessStatusCode(); // Throws an exception for 4xx/5xx responses
+
+                    Console.WriteLine("Response received for Individual game id");
+
+                    string type = response.Content.GetType().ToString();
+
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    //Console.WriteLine(responseBody);
+
+                    // Deserialize the JSON response into a dynamic object
+                    JsonNode jsonResponse = JsonNode.Parse(responseBody);
+                    //Console.WriteLine(jsonResponse);
+                    Console.WriteLine(jsonResponse["cheapestPriceEver"]);
+
+                    JsonNode cheapestPriceEver = jsonResponse["cheapestPriceEver"];
+                    string Price = cheapestPriceEver["price"]?.GetValue<string>();
+                    Console.WriteLine(Price);
+                    bestDeal.cheapestPriceEver = Price != null ? Price : "No price available";
+
+                    if (cheapestPriceEver["date"] != null)
+                    {
+                        long unixTimestamp = cheapestPriceEver["date"].GetValue<long>();
+
+                        //Set Unix timestamp value to Human date 
+                        DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
+
+                        string Date = dateTime.Date.ToString("MMMM dd, yyyy");
+                        Console.WriteLine(Date);
+                        bestDeal.date = Date != null ? Date : "No date available";
+                    }
+
+                    return bestDeal ?? new BestGameDeal();
+
+
+
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine($"Request error: {e.Message}");
+                    return new BestGameDeal(); // Return an empty BestGameDeal on error
+                }
+            }
+        }
+
+        
         public static async Task GetDealInfo(string id)
         {
             using (HttpClient client = new HttpClient())
@@ -150,7 +207,7 @@ namespace EasyDeal.Server.Controllers
             }
         }
 
-        public static async Task GetRequestId(string id)
+        public static async Task GetRequestIdOld(string id)
         {
             using (HttpClient client = new HttpClient())
             {
