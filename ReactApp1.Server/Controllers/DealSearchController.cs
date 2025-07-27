@@ -1,12 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ReactApp1.Server.Controllers;
 using ReactApp1.Server.Models; 
-using System;
-using System.Net.Http;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace EasyDeal.Server.Controllers
 {
@@ -33,8 +27,8 @@ namespace EasyDeal.Server.Controllers
 
             //Testing new request function
             Console.WriteLine(deals[0].cheapestDealID);
-            CheapSharkApiRequests.GetDealInfo(deals[0].cheapestDealID);
-            CheapSharkApiRequests.GetRequestId(deals[0].gameID);
+            //CheapSharkApiRequests.GetDealInfo(deals[0].cheapestDealID);
+            CheapSharkApiRequests.GetRequestIdOld(deals[0].gameID);
 
 
             return Ok(deals); // Serialize list of deals to JSON

@@ -41,4 +41,8 @@
 		<ProjectReference Include="..\reactapp1.client\React.client.esproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Migrations\" />
+	</ItemGroup>
+
 </Project>

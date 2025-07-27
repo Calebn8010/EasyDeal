@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EasyDeal.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250526145946_db1")]
+    [Migration("20250712150410_db1")]
     partial class db1
     {
         /// <inheritdoc />
