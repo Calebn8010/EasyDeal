@@ -25,7 +25,7 @@ namespace EasyDeal.Server.Controllers
             //var deals = await GetGameListRequest(request.Query);
             var deals = await CheapSharkApiRequests.GetGameList(request.Query);
 
-            //Testing new request function
+            //Testing new request function / git test
             Console.WriteLine(deals[0].cheapestDealID);
             //CheapSharkApiRequests.GetDealInfo(deals[0].cheapestDealID);
             CheapSharkApiRequests.GetRequestIdOld(deals[0].gameID);
