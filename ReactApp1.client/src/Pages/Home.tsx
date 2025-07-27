@@ -7,6 +7,7 @@ import SearchForm from "../Components/DealSearch.tsx";
 function Home() {
     const [deals, setDeals] = useState<any[]>([]);
     const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
+    const [dealInfo, setInfo] = useState<any | null>(null);
 
     async function handleSearch(query: string) {
         const response = await fetch('dealsearch', {
@@ -28,11 +29,17 @@ function Home() {
         console.log("Add clicked for:", deal);
     }
 
-    function toggleExpand(idx: number, gameID: string) {
+    async function toggleExpand(idx: number, gameID: string) {
         setExpandedIdx(expandedIdx === idx ? null : idx);
-        console.log("Test");
-        console.log(gameID);
-        
+        setInfo(null); // Clear previous info to trigger "Loading..."
+
+        const response = await fetch('bestdealinfo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gameID })
+        });
+        const data = await response.json();
+        setInfo(data);
     }
 
     return (
@@ -71,10 +78,18 @@ function Home() {
                             </div>
                             {expandedIdx === idx && (
                                 <div className="extra-info">
-                                    {/* Display additional info here */}
-                                    <div className="best-deal-ever"><strong>Best Deal Ever: $</strong>{deal.cheapest}</div>
-                                    <div>Date: {deal.storeID}</div>
-                                    
+                                    {/* Use dealInfo[deal.gameID] if available, else fallback */}
+                                    {dealInfo ? (
+                                        <>
+                                            <div className="best-deal-ever">
+                                                <strong>Best Deal Ever: $</strong>
+                                                {dealInfo.cheapestPriceEver}
+                                            </div>
+                                            <div>Date: {dealInfo.date}</div>
+                                        </>
+                                    ) : (
+                                        <div>Loading...</div>
+                                    )}
                                 </div>
                             )}
                         </li>
