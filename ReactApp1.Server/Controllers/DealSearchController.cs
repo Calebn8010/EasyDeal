@@ -31,6 +31,7 @@ namespace EasyDeal.Server.Controllers
             //Testing new request function
             Console.WriteLine(deals[0].cheapestDealID);
             GetDealInfo(deals[0].cheapestDealID);
+            GetRequestId(deals[0].gameID);
 
             return Ok(deals); // Serialize list of deals to JSON
         }
@@ -135,7 +136,7 @@ namespace EasyDeal.Server.Controllers
 
 
                     string chepestPriceEver = cheapestPrice["price"]?.GetValue<string>();
-                    Console.WriteLine(chepestPriceEver);
+                    Console.WriteLine($"Cheapest Price ever: {chepestPriceEver}");
 
                     //Check for cheapest price date
                     if (cheapestPrice["date"] != null)
@@ -152,13 +153,13 @@ namespace EasyDeal.Server.Controllers
                     //Check for release date
                     if (gameInfo["releaseDate"] != null)
                     {
-                        long unixTimestamp = cheapestPrice["date"].GetValue<long>();
+                        long unixTimestamp = gameInfo["releaseDate"].GetValue<long>();
 
                         //Set Unix timestamp value to Human date 
                         DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
 
                         string releaseDate = dateTime.Date.ToString("MMMM dd, yyyy");
-                        Console.WriteLine($"chepest price date: {releaseDate}");
+                        Console.WriteLine($"Release date: {releaseDate}");
                     }
 
 
@@ -183,7 +184,7 @@ namespace EasyDeal.Server.Controllers
 
                     response.EnsureSuccessStatusCode(); // Throws an exception for 4xx/5xx responses
 
-                    Console.WriteLine("Response received");
+                    Console.WriteLine("Response received for Individual game id");
 
                     string type = response.Content.GetType().ToString();
 
