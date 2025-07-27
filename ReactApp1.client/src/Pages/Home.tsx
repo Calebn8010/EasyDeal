@@ -28,8 +28,11 @@ function Home() {
         console.log("Add clicked for:", deal);
     }
 
-    function toggleExpand(idx: number) {
+    function toggleExpand(idx: number, gameID: string) {
         setExpandedIdx(expandedIdx === idx ? null : idx);
+        console.log("Test");
+        console.log(gameID);
+        
     }
 
     return (
@@ -60,7 +63,7 @@ function Home() {
                                 </button>
                                 <button
                                     className="drop-down"
-                                    onClick={() => toggleExpand(idx)}
+                                    onClick={() => toggleExpand(idx, deal.gameID)}
                                     aria-label="Expand details"
                                 >
                                     {expandedIdx === idx ? '▲' : '▼'}
