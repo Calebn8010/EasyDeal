@@ -69,8 +69,8 @@ function Home() {
                             {expandedIdx === idx && (
                                 <div className="extra-info">
                                     {/* Display additional info here */}
-                                    <div><strong>Deal ID:</strong> {deal.dealID}</div>
-                                    <div><strong>Store:</strong> {deal.storeID}</div>
+                                    <div><strong>Best Deal Ever:</strong> {deal.cheapest}</div>
+                                    <div><strong>Release Date</strong> {deal.storeID}</div>
                                     <div><strong>Other Info:</strong> {deal.someOtherField ?? "N/A"}</div>
                                 </div>
                             )}
