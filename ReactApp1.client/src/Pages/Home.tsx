@@ -72,8 +72,10 @@ function Home() {
                                     className="drop-down"
                                     onClick={() => toggleExpand(idx, deal.gameID)}
                                     aria-label="Expand details"
+                                    style={{ visibility: expandedIdx === idx ? 'hidden' : 'visible' }}
                                 >
                                     {expandedIdx === idx ? '▲' : '▼'}
+
                                 </button>
                             </div>
                             {expandedIdx === idx && (
