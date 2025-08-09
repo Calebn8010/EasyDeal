@@ -1,6 +1,5 @@
 ﻿using EasyDeal.Server.Models;
 using Microsoft.AspNetCore.Mvc;
-using ReactApp1.Server.Models;
 
 
 namespace EasyDeal.Server.Controllers
