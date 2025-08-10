@@ -74,6 +74,10 @@ export default defineConfig({
             '^/bestdealinfo': {
                 target,
                 secure: false
+            },
+            '^/wishlistupdates': {
+                target,
+                secure: false
             }
         },
         port: parseInt(env.DEV_SERVER_PORT || '49366'),
