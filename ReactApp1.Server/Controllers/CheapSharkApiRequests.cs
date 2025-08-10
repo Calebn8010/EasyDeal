@@ -15,7 +15,7 @@ namespace EasyDeal.Server.Controllers
 {
     public class CheapSharkApiRequests
     {
-        public static async Task<List<GameDeal>> GetGameList(string game)
+        public static async Task<List<GameDeal>> GetGameList(string game, ILogger<DealSearchController> logger)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -26,10 +26,10 @@ namespace EasyDeal.Server.Controllers
                     response.EnsureSuccessStatusCode(); // Throws an exception for 4xx/5xx responses
 
                     string type = response.Content.GetType().ToString();
-                    Console.WriteLine($"Response type: {type}");
+                    logger.LogInformation($"Response type: {type}");
 
                     string responseBody = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(responseBody);
+                    logger.LogInformation(responseBody);
 
                     // Deserialize the JSON response into a dynamic object
                     JsonNode jsonResponse = JsonNode.Parse(responseBody);
@@ -65,13 +65,13 @@ namespace EasyDeal.Server.Controllers
                 }
                 catch (HttpRequestException e)
                 {
-                    Console.WriteLine($"Request error: {e.Message}");
+                    logger.LogWarning($"Request error: {e.Message}");
                     return new List<GameDeal>(); // Return an empty list on error
                 }
             }
         }
 
-        public static async Task<BestGameDeal>GameInfoById(string id)
+        public static async Task<BestGameDeal>GameInfoById(string id, ILogger<BestDealInfoController> logger)
         {
             var bestDeal = new BestGameDeal();
 
@@ -84,7 +84,7 @@ namespace EasyDeal.Server.Controllers
 
                     response.EnsureSuccessStatusCode(); // Throws an exception for 4xx/5xx responses
 
-                    Console.WriteLine("Response received for Individual game id");
+                    logger.LogInformation("Response received for Individual game id");
 
                     string type = response.Content.GetType().ToString();
 
@@ -120,7 +120,7 @@ namespace EasyDeal.Server.Controllers
                 }
                 catch (HttpRequestException e)
                 {
-                    Console.WriteLine($"Request error: {e.Message}");
+                    logger.LogWarning($"Request error: {e.Message}");
                     return new BestGameDeal(); // Return an empty BestGameDeal on error
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ReactApp1.Server.Models; 
 
 
@@ -20,15 +21,15 @@ namespace EasyDeal.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] DealSearchRequest request)
         {
-            Console.WriteLine("DealSearchController Post method called.");
-            Console.WriteLine($"Received query: {request?.Query}");
+            _logger.LogInformation("DealSearchController Post method called.");
+            _logger.LogInformation($"Received query: {request?.Query}");
             //var deals = await GetGameListRequest(request.Query);
-            var deals = await CheapSharkApiRequests.GetGameList(request.Query);
+            var deals = await CheapSharkApiRequests.GetGameList(request.Query, _logger);
 
             //Testing new request function / git test
-            Console.WriteLine(deals[0].cheapestDealID);
+            //Console.WriteLine(deals[0].cheapestDealID);
             //CheapSharkApiRequests.GetDealInfo(deals[0].cheapestDealID);
-            CheapSharkApiRequests.GetRequestIdOld(deals[0].gameID);
+            //CheapSharkApiRequests.GetRequestIdOld(deals[0].gameID);
 
 
             return Ok(deals); // Serialize list of deals to JSON

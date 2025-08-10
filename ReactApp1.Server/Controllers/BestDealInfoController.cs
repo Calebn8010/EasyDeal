@@ -1,5 +1,6 @@
 ﻿using EasyDeal.Server.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 
 namespace EasyDeal.Server.Controllers
@@ -19,10 +20,10 @@ namespace EasyDeal.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] BestGameDealRequest request)
         {
-            Console.WriteLine("BestDealInfoController Post method called.");
+            _logger.LogInformation("BestDealInfoController Post method called.");
             
             // Fetch the list of game deals based on the query
-            var dealInfo = await CheapSharkApiRequests.GameInfoById(request.gameID);
+            var dealInfo = await CheapSharkApiRequests.GameInfoById(request.gameID, _logger);
             
             return Ok(dealInfo); // Serialize detailed deal info to JSON
         }
