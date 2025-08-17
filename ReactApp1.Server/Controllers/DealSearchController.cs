@@ -22,9 +22,9 @@ namespace EasyDeal.Server.Controllers
         public async Task<IActionResult> Post([FromBody] DealSearchRequest request)
         {
             _logger.LogInformation("DealSearchController Post method called.");
-            _logger.LogInformation($"Received query: {request?.Query}");
+            _logger.LogInformation($"Received query: {request?.query}");
             //var deals = await GetGameListRequest(request.Query);
-            var deals = await CheapSharkApiRequests.GetGameList(request.Query, _logger);
+            var deals = await CheapSharkApiRequests.GetGameList(request.query, _logger);
 
             //Testing new request function / git test
             //Console.WriteLine(deals[0].cheapestDealID);
