@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ReactApp1.Server.Models;
+using EasyDeal.Server.Models;
 
 namespace EasyDeal.Server.Controllers
 {
@@ -30,8 +31,8 @@ namespace EasyDeal.Server.Controllers
         public bool AddToWishlist(GameDeal gameDeal)
         {
             _logger.LogInformation($"Game deal to add: {gameDeal}");
-            // Implement your logic to add the game deal to the wishlist
-            // For example, you might save it to a database or an in-memory list
+            // Implement logic to add the game deal to the wishlist
+            
             // Return true if the operation was successful, otherwise false
             return true;
         }
