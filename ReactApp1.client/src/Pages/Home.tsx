@@ -25,8 +25,16 @@ function Home() {
         //console.log(typeof arrayData);
     }
 
-    function handleAdd(deal: any) {
+    async function handleAdd(deal: object) { //instead of object - add interface in future
         console.log("Add clicked for:", deal);
+        console.log(JSON.stringify(deal));
+        console.log(JSON.stringify({ deal }));
+        const response = await fetch('wishlistupdates', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(deal)
+        });
+
     }
 
     async function toggleExpand(idx: number, gameID: string) {
