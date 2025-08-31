@@ -10,6 +10,7 @@ function Home() {
     const [dealInfo, setInfo] = useState<any | null>(null);
 
     async function handleSearch(query: string) {
+        console.log({ query })
         const response = await fetch('dealsearch', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
