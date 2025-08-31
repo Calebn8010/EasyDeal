@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EasyDeal.Server.Data;
+using EasyDeal.Server.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ReactApp1.Server.Models;
-using EasyDeal.Server.Models;
 
 namespace EasyDeal.Server.Controllers
 {
@@ -14,6 +16,14 @@ namespace EasyDeal.Server.Controllers
         public WishlistUpdatesController(ILogger<WishlistUpdatesController> logger)
         {
             _logger = logger;
+        }
+
+
+        private readonly ApplicationDbContext _context;
+
+        public WishlistUpdatesController(ApplicationDbContext context)
+        {
+            _context = context;
         }
 
 
@@ -30,9 +40,15 @@ namespace EasyDeal.Server.Controllers
 
         public bool AddToWishlist(GameDeal gameDeal)
         {
-            _logger.LogInformation($"Game deal to add: {gameDeal}");
+            _logger.LogInformation($"Game deal to add: {gameDeal.external}");
             // Implement logic to add the game deal to the wishlist
-            
+            var tableNames = _context.Model.GetEntityTypes()
+            .Select(t => t.GetTableName())
+            .Distinct()
+            .ToList();
+
+            _logger.LogInformation("Tables in DbContext: {Tables}", string.Join(", ", tableNames));
+
             // Return true if the operation was successful, otherwise false
             return true;
         }
