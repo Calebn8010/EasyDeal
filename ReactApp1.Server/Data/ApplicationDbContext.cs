@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using EasyDeal.Server.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EasyDeal.Server.Data
@@ -9,6 +10,8 @@ namespace EasyDeal.Server.Data
             : base(options)
         {
         }
+
+        public DbSet<Wishlist> Wishlists { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
