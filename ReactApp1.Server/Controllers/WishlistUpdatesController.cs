@@ -12,45 +12,54 @@ namespace EasyDeal.Server.Controllers
     public class WishlistUpdatesController : ControllerBase
     {
         private readonly ILogger<WishlistUpdatesController> _logger;
-
-        public WishlistUpdatesController(ILogger<WishlistUpdatesController> logger)
-        {
-            _logger = logger;
-        }
-
-
         private readonly ApplicationDbContext _context;
 
-        public WishlistUpdatesController(ApplicationDbContext context)
+        public WishlistUpdatesController(ILogger<WishlistUpdatesController> logger, ApplicationDbContext context)
         {
+            _logger = logger;
             _context = context;
         }
-
-
 
         // Handles Post request from front end for WishlistUpdates endpoint
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] GameDeal request)
         {
             _logger.LogInformation("WishlistUpdatesController Post method called.");
-            AddToWishlist(request);
+
+            // Get logged in user id 
+            string? userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                _logger.LogWarning("No user is logged in.");
+                return Unauthorized(new { message = "User is not logged in." });
+            }
+
+            _logger.LogInformation($"User id: {userId}");
+
+            AddToWishlist(request, userId);
 
             return Ok(new { message = "Wishlist updated successfully." });
         }
 
-        public bool AddToWishlist(GameDeal gameDeal)
+        public bool AddToWishlist(GameDeal gameDeal, string userid)
         {
             _logger.LogInformation($"Game deal to add: {gameDeal.external}");
             // Implement logic to add the game deal to the wishlist
-            var tableNames = _context.Model.GetEntityTypes()
-            .Select(t => t.GetTableName())
-            .Distinct()
-            .ToList();
 
-            _logger.LogInformation("Tables in DbContext: {Tables}", string.Join(", ", tableNames));
+            // Map GameDeal to Wishlist
+            Wishlist wishlistEntry = new Wishlist
+            {
+                GameName = gameDeal.external, // or use another property if more appropriate
+                GameId = gameDeal.gameID,
+                DateAdded = DateTime.UtcNow,
+                UserId = userid
+            };
 
-            // Return true if the operation was successful, otherwise false
-            return true;
+            _context.Wishlists.Add(wishlistEntry);
+            int result = _context.SaveChanges();
+
+            return result > 0; // returns true if at least one row was affected
+
         }
     }
 }
