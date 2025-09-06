@@ -10,6 +10,7 @@ function Home() {
     const [dealInfo, setInfo] = useState<any | null>(null);
 
     async function handleSearch(query: string) {
+        setExpandedIdx(null); //clear best deal if search /toggle has already been used
         console.log({ query })
         const response = await fetch('dealsearch', {
             method: 'POST',
@@ -40,7 +41,7 @@ function Home() {
 
     async function toggleExpand(idx: number, gameID: string) {
         setExpandedIdx(expandedIdx === idx ? null : idx);
-        setInfo(null); // Clear previous info to trigger "Loading..."
+        setInfo(null); //clear previous info to trigger "Loading..."
 
         const response = await fetch('bestdealinfo', {
             method: 'POST',
