@@ -18,6 +18,8 @@ namespace EasyDeal.Server.Data
 
         // Optional: link to Identity user
         public string UserId { get; set; }
+
+        public bool IsDeleted { get; set; }
         //public ApplicationUser User { get; set; }
     }
 }
