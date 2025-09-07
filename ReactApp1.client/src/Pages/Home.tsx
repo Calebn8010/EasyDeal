@@ -53,7 +53,7 @@ function Home() {
 
             setTimeout(() => {
                 document.body.removeChild(notification);
-            }, 2000);
+            }, 3500);
         }
 
         if (response.status == 409) {
