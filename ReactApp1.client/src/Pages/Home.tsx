@@ -55,6 +55,9 @@ function Home() {
                 document.body.removeChild(notification);
             }, 2000);
         }
+
+        console.log(response);
+        
     }
 
     async function toggleExpand(idx: number, gameID: string) {
