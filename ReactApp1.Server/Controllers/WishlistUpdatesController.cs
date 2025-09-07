@@ -35,9 +35,10 @@ namespace EasyDeal.Server.Controllers
             }
 
             _logger.LogInformation($"User id: {userId}");
-            //AddToWishlist(request, userId);
-            //return Ok(new { message = "Wishlist updated successfully." });
+            AddToWishlist(request, userId);
+            return Ok(new { message = "Wishlist updated successfully." });
             
+            /*
             if (AddToWishlist(request, userId))
             {
                 return Ok(new { message = "Wishlist updated successfully." });
@@ -45,6 +46,7 @@ namespace EasyDeal.Server.Controllers
             
             else // 409 standard for resource conflicts
                 return StatusCode(409, new { message = "Game is already added into your Wishlist" });
+            */
         }
 
         public bool AddToWishlist(GameDeal gameDeal, string userid)
