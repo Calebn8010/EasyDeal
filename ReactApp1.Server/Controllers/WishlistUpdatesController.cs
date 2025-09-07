@@ -35,10 +35,16 @@ namespace EasyDeal.Server.Controllers
             }
 
             _logger.LogInformation($"User id: {userId}");
-
             AddToWishlist(request, userId);
-
             return Ok(new { message = "Wishlist updated successfully." });
+            /*
+            if (AddToWishlist(request, userId))
+            {
+                return Ok(new { message = "Wishlist updated successfully." });
+            }
+            */
+            //else
+            //    return Problem("Game is already added into your Wishlist");
         }
 
         public bool AddToWishlist(GameDeal gameDeal, string userid)
@@ -46,19 +52,39 @@ namespace EasyDeal.Server.Controllers
             _logger.LogInformation($"Game deal to add: {gameDeal.external}");
             // Implement logic to add the game deal to the wishlist
 
+            //check if Wishlist gane record with user id is already in db
+            bool inWishlist = _context.Wishlists
+                .Any(w => w.GameId == gameDeal.gameID && w.UserId == userid && !w.IsDeleted);
+
+            if (inWishlist)
+            {
+                _logger.LogInformation($"Game is already in wishlist for this user: {gameDeal.external}");
+                return false;
+            }
+
+            //bool in_wishlist = from _context.Wishlists
             // Map GameDeal to Wishlist
             Wishlist wishlistEntry = new Wishlist
             {
-                GameName = gameDeal.external, // or use another property if more appropriate
+                GameName = gameDeal.external,
                 GameId = gameDeal.gameID,
                 DateAdded = DateTime.UtcNow,
                 UserId = userid
+                // IsDeleted defaults to false since it is a bool
             };
 
             _context.Wishlists.Add(wishlistEntry);
             int result = _context.SaveChanges();
+            
+            if (result == 0)
+            { 
+                _logger.LogError($"Not able to save changes - check db connection");
+                return false;
+            }
+            else
+                return result > 0; // returns true if at least one row was affected
 
-            return result > 0; // returns true if at least one row was affected
+
 
         }
     }
