@@ -362,3 +362,10 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /reactapp1.client/src/Components
+/ReactApp1.Server/Migrations/20250712150410_db1.cs
+/ReactApp1.Server/Migrations/20250712150410_db1.cs
+/ReactApp1.Server/Migrations/20250712150410_db1.cs
+/ReactApp1.Server/Migrations/20250712150410_db1.Designer.cs
+/ReactApp1.Server/Migrations/20250712150410_db1.cs
+/ReactApp1.Server/Migrations/20250712150410_db1.Designer.cs
+/.gitignore
