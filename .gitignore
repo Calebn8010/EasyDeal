@@ -364,3 +364,4 @@ FodyWeavers.xsd
 /reactapp1.client/src/Components
 /reactapp1.client/package-lock.json
 /.gitignore
+/ReactApp1.client/eslint.config.js.old
