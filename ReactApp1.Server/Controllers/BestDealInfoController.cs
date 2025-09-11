@@ -21,9 +21,9 @@ namespace EasyDeal.Server.Controllers
         public async Task<IActionResult> Post([FromBody] BestGameDealRequest request)
         {
             _logger.LogInformation("BestDealInfoController Post method called.");
-            
+
             // Fetch the list of game deals based on the query
-            var dealInfo = await CheapSharkApiRequests.GameInfoById(request.gameID, _logger);
+            BestGameDeal dealInfo = await CheapSharkApiRequests.GameInfoById(request.gameID, _logger);
             
             return Ok(dealInfo); // Serialize detailed deal info to JSON
         }

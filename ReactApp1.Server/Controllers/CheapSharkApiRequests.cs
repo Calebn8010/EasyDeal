@@ -34,7 +34,7 @@ namespace EasyDeal.Server.Controllers
                     // Deserialize the JSON response into a dynamic object
                     JsonNode jsonResponse = JsonNode.Parse(responseBody);
 
-                    var deals = System.Text.Json.JsonSerializer.Deserialize<List<GameDeal>>(responseBody);
+                    List<GameDeal> deals = System.Text.Json.JsonSerializer.Deserialize<List<GameDeal>>(responseBody);
 
                     foreach (var entry in jsonResponse.AsArray())
                     {
@@ -73,7 +73,7 @@ namespace EasyDeal.Server.Controllers
 
         public static async Task<BestGameDeal>GameInfoById(string id, ILogger<BestDealInfoController> logger)
         {
-            var bestDeal = new BestGameDeal();
+            BestGameDeal bestDeal = new BestGameDeal();
 
             using (HttpClient client = new HttpClient())
             {
@@ -86,7 +86,7 @@ namespace EasyDeal.Server.Controllers
 
                     logger.LogInformation("Response received for Individual game id");
 
-                    string type = response.Content.GetType().ToString();
+                    //string type = response.Content.GetType().ToString();
 
                     string responseBody = await response.Content.ReadAsStringAsync();
                     //Console.WriteLine(responseBody);

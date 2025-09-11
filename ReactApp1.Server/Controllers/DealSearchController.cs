@@ -24,7 +24,7 @@ namespace EasyDeal.Server.Controllers
             _logger.LogInformation("DealSearchController Post method called.");
             _logger.LogInformation($"Received query: {request?.query}");
             //var deals = await GetGameListRequest(request.Query);
-            var deals = await CheapSharkApiRequests.GetGameList(request.query, _logger);
+            List<GameDeal> deals = await CheapSharkApiRequests.GetGameList(request.query, _logger);
 
             //Testing new request function / git test
             //Console.WriteLine(deals[0].cheapestDealID);
