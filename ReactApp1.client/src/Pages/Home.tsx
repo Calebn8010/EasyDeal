@@ -1,5 +1,4 @@
-﻿import React, { useState } from 'react';
-import WeatherForecast from "../Components/WeatherForecast.tsx";
+﻿import { useState } from 'react';
 import LogoutLink from "../Components/LogoutLink.tsx";
 import AuthorizeView, { AuthorizedUser } from "../Components/AuthorizeView.tsx";
 import SearchForm from "../Components/DealSearch.tsx";
