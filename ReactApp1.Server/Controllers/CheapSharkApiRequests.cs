@@ -21,15 +21,19 @@ namespace EasyDeal.Server.Controllers
             {
                 try
                 {
-                    string url = $"https://www.cheapshark.com/api/1.0/games?title={game}&exact=0";
+                    string url = $"https://www.cheapshark.com/api/1.0/games?title={game}"; //$"https://www.cheapshark.com/api/1.0/games?title={game}&exact=0"
+                                   https://www.cheapshark.com/api/1.0/games?title=batman'
                     HttpResponseMessage response = await client.GetAsync(url);
+
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    logger.LogInformation(responseBody);
+
                     response.EnsureSuccessStatusCode(); // Throws an exception for 4xx/5xx responses
 
                     string type = response.Content.GetType().ToString();
                     logger.LogInformation($"Response type: {type}");
 
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    logger.LogInformation(responseBody);
+                   
 
                     // Deserialize the JSON response into a dynamic object
                     JsonNode jsonResponse = JsonNode.Parse(responseBody);
