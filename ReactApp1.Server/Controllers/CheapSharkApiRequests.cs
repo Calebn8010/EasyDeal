@@ -15,21 +15,32 @@ namespace EasyDeal.Server.Controllers
 {
     public class CheapSharkApiRequests
     {
+        // Centralized factory so every HttpClient created here includes the User-Agent header.
+        private static HttpClient CreateHttpClient()
+        {
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("User-Agent",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36");
+            return client;
+        }
+
         public static async Task<List<GameDeal>> GetGameList(string game, ILogger<DealSearchController> logger)
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = CreateHttpClient())
             {
                 try
                 {
-                    string url = $"https://www.cheapshark.com/api/1.0/games?title={game}&exact=0";
+                    string url = $"https://www.cheapshark.com/api/1.0/games?title={game}";
+
                     HttpResponseMessage response = await client.GetAsync(url);
+
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    logger.LogInformation(responseBody);
+
                     response.EnsureSuccessStatusCode(); // Throws an exception for 4xx/5xx responses
 
                     string type = response.Content.GetType().ToString();
                     logger.LogInformation($"Response type: {type}");
-
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    logger.LogInformation(responseBody);
 
                     // Deserialize the JSON response into a dynamic object
                     JsonNode jsonResponse = JsonNode.Parse(responseBody);
@@ -71,11 +82,11 @@ namespace EasyDeal.Server.Controllers
             }
         }
 
-        public static async Task<BestGameDeal>GameInfoById(string id, ILogger<BestDealInfoController> logger)
+        public static async Task<BestGameDeal> GameInfoById(string id, ILogger<BestDealInfoController> logger)
         {
             BestGameDeal bestDeal = new BestGameDeal();
 
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = CreateHttpClient())
             {
                 try
                 {
@@ -105,7 +116,7 @@ namespace EasyDeal.Server.Controllers
                     {
                         long unixTimestamp = cheapestPriceEver["date"].GetValue<long>();
 
-                        //Set Unix timestamp value to Human date 
+                        // Set Unix timestamp value to Human date 
                         DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
 
                         string Date = dateTime.Date.ToString("MMMM dd, yyyy");
@@ -114,9 +125,6 @@ namespace EasyDeal.Server.Controllers
                     }
 
                     return bestDeal ?? new BestGameDeal();
-
-
-
                 }
                 catch (HttpRequestException e)
                 {
@@ -126,10 +134,9 @@ namespace EasyDeal.Server.Controllers
             }
         }
 
-        
         public static async Task GetDealInfo(string id)
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = CreateHttpClient())
             {
                 try
                 {
@@ -178,7 +185,7 @@ namespace EasyDeal.Server.Controllers
                     {
                         long unixTimestamp = cheapestPrice["date"].GetValue<long>();
 
-                        //Set Unix timestamp value to Human date 
+                        // Set Unix timestamp value to Human date 
                         DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
 
                         string Date = dateTime.Date.ToString("MMMM dd, yyyy");
@@ -196,9 +203,6 @@ namespace EasyDeal.Server.Controllers
                         string releaseDate = dateTime.Date.ToString("MMMM dd, yyyy");
                         Console.WriteLine($"Release date: {releaseDate}");
                     }
-
-
-
                 }
                 catch (HttpRequestException e)
                 {
@@ -209,7 +213,7 @@ namespace EasyDeal.Server.Controllers
 
         public static async Task GetRequestIdOld(string id)
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = CreateHttpClient())
             {
                 try
                 {
@@ -238,15 +242,12 @@ namespace EasyDeal.Server.Controllers
                     {
                         long unixTimestamp = cheapestPriceEver["date"].GetValue<long>();
 
-                        //Set Unix timestamp value to Human date 
+                        // Set Unix timestamp value to Human date 
                         DateTimeOffset dateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
 
                         string Date = dateTime.Date.ToString("MMMM dd, yyyy");
                         Console.WriteLine(Date);
                     }
-
-
-
                 }
                 catch (HttpRequestException e)
                 {
@@ -254,6 +255,5 @@ namespace EasyDeal.Server.Controllers
                 }
             }
         }
-
     }
 }
